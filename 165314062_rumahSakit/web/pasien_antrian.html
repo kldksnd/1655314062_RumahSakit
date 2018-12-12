@@ -1,0 +1,146 @@
+<html lang="en">
+    <head>
+        <title>Antrian Klinik</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <style>
+            body {
+                font: 20px Montserrat, sans-serif;
+                line-height: 1.8;
+                color: #f5f6f7;
+            }
+            p {font-size: 16px;}
+            .margin {margin-bottom: 45px;}
+            .bg-1 { 
+                background-color: #1abc9c; /* Green */
+                color: #ffffff;
+            }
+            .bg-4 { 
+                background-color: #2f2f2f; /* Black Gray */
+                color: #fff;
+            }
+            .container-fluid {
+                padding-top: 70px;
+                padding-bottom: 70px;
+            }            
+            .navbar {
+                padding-top: 15px;
+                padding-bottom: 15px;
+                border: 0;
+                border-radius: 0;
+                margin-bottom: 0;
+                font-size: 12px;
+                letter-spacing: 5px;
+            }
+            .navbar-nav  li a:hover {
+                color: #1abc9c !important;
+            }
+        </style>
+    </head>
+    <body>
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>                        
+                    </button>
+                    <a class="navbar-brand" href=pasien_home.html>Home</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="pasien_regis.html">Registrasi</a></li>
+                        <li><a href="pasien_antrian.html">Tambah Antrian</a></li>
+                        <li><a href="pasien_daftarDokter.html">Daftar Dokter</a></li>
+                        <li><a href="pasien_daftarKlinik.html">Daftar Klinik</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid bg-1">
+            <h3 class="margin">Form Antrian Klinik</h3>
+            <form onsubmit="return make_json(this);" method="POST">
+                <div class="form-group">
+                    <label for="noRm">No. RM:</label>
+                    <input type="noRm" class="form-control" id="noRm" placeholder="Masukkan Nomor Rekam Medis">
+                    <button type="button" onclick="loadDoc()" id="btn">OK</button>
+                </div>
+                <div class="form-group">
+                    <label for="nama">Nama:</label>
+                    <input type="nama" class="form-control" disabled id="nama" required>
+                </div>
+                <!--                <div class="form-group">
+                                    <label for="noRm">NoRm:</label>
+                                    <input type="noRm" class="form-control" disabled id="noRm" required>
+                                </div>-->
+                <div class="form-group">
+                    <label for="alamat">Alamat:</label>
+                    <input type="alamat" class="form-control" disabled id="alamat" >
+                </div>
+                <div class="form-group">
+                    <label for="tanggal">Tanggal Berobat:</label>
+                    <input style="color: grey; width:100%;" type="date"  id="tanggal" value="">    
+                </div>
+                <font color=black size="3">Klinik : </font><br>
+                <select class="form-control" id="namaKlinik">
+                    <option style="color:black" label="--Pilih Klinik--"></option>
+                    <option style="color:black" label="Umum">Umum</option>
+                    <option style="color:black" label="Gigi">Mata</option>
+                    <option style="color:black" label="Mata">Gigi</option>
+                </select>
+
+
+                <button type="submit" class="btn btn-default" >Simpan</button>
+            </form>   
+            <p id="berhasil"></p>
+        </div>
+
+        <script>
+            function loadDoc() {
+                var url = "http://202.94.83.190:8080/165314062rsku/webresources/Pasien/cariPasien?noRm=" + noRm.value;
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("GET", url, true);
+                xhttp.send();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var objj = JSON.parse(this.responseText);
+                        document.getElementById("nama").value = objj.nama;
+                        document.getElementById("alamat").value = objj.alamat;
+                    }
+                };
+            }
+            function make_json(form) {
+                var json = {
+                    "nama": form.nama.value,
+                    "alamat": form.alamat.value,
+                    "tanggal": form.tanggal.value,
+                    "namaKlinik": form.namaKlinik.value
+                };
+                var html = JSON.stringify(json, 0, 100);
+                var Url = "http://202.94.83.190:8080/165314027_RsServiceBaru/webresources/Antrian/addAntrian";
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', Url, false);
+                xhr.setRequestHeader("Content-type", "application/json");
+                xhr.send(html);
+                document.getElementById("berhasil").innerHTML = "Pendaftaran Berhasil";
+                return false;
+            }
+        </script>
+
+        <!-- Footer -->
+        <footer class="container-fluid bg-4 text-center">
+            <p><font size="4">Jl. Jendral Sudirman, Ilir Kota, Kapuas, Kab. Sanggau, Kalimantan Barat 78516</font><br>
+                <font size="3">Telp: (+62) 813 5138 7555 | E-mail: rssanggau@gmail.com</font><br></p>
+        </footer>
+    </body>
+</html>

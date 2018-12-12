@@ -1,0 +1,128 @@
+<html lang="en">
+    <head>
+        <title>Rumah Sakit</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <style>
+            #map {
+                height: 50%;
+                width: 50%
+            }
+            /* Optional: Makes the sample page fill the window. */
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                font: 20px Montserrat, sans-serif;
+                line-height: 1.8;
+                color: #f5f6f7;
+            }
+            p {font-size: 16px;}
+            .margin {margin-bottom: 45px;}
+            .bg-1 { 
+                background-color: #1abc9c; /* Green */
+                color: #ffffff;
+            }
+            .bg-4 { 
+                background-color: #2f2f2f; /* Black Gray */
+                color: #fff;
+            }
+            .container-fluid {
+                padding-top: 70px;
+                padding-bottom: 70px;
+            }            
+            .navbar {
+                padding-top: 15px;
+                padding-bottom: 15px;
+                border: 0;
+                border-radius: 0;
+                margin-bottom: 0;
+                font-size: 12px;
+                letter-spacing: 5px;
+            }
+            .navbar-nav  li a:hover {
+                color: #1abc9c !important;
+            }
+
+        </style>
+    </head>
+    <body>
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>                        
+                    </button>
+                    <a class="navbar-brand" href=admin_home.html>Home</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav navbar-right"> 
+                        <li><a href="admin_daftarPasien.html">Daftar Pasien</a></li>
+                        <li><a href="admin_tambahDokter.html">Tambah Dokter</a></li>
+                        <li><a href="admin_tambahKlinik.html">Tambah Klinik</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- First Container -->
+        <div class ="container-fluid bg-1">
+            <h1>Daftar Pasien</h1>
+             <button type ="button" onclick= "loadPasien()" id="btn" style="margin-left: 5%">Klik Disini</button>
+            <p id="demo"></p> 
+        </div>
+
+
+        <script>
+            function loadPasien() {
+            var url = "http://202.94.83.190:8080/165314062rsku/webresources/Pasien";
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    loopingList(this.responseText);
+                }
+            }
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+
+            function loopingList(response) {
+                var size = JSON.parse(response);
+                var i;
+                var out = "<table align='center' style='width: 60%;' border='1'> <tr><th>No RM</th><th>Nama Pasien</th><th>Alamat</th>\n\
+       <th>NIK</th><th>Tanggal Lahir</th><th>Kelamin</th></tr>";
+
+                for (i = 0; i < size.length; i++) {
+                    out += "<tr><td>" + size[i].noRm +
+                            "</td><td>" + size[i].nama +
+                            "</td><td>" + size[i].alamat +
+                            "</td><td>" + size[i].nik +
+                            "</td><td>" + size[i].tanggalLahir +
+                            "</td><td>" + size[i].kelamin +
+                            "</td></tr>";
+                }
+                out += "</table>";
+                document.getElementById("demo").innerHTML = out;
+                ;
+            }
+        }
+        </script>
+
+        <!-- Footer -->
+        <footer class="container-fluid bg-4 text-center">
+            <p><font size="4">Jl. Jendral Sudirman, Ilir Kota, Kapuas, Kab. Sanggau, Kalimantan Barat 78516</font><br>
+                <font size="3">Telp: (+62) 813 5138 7555 | E-mail: rssanggau@gmail.com</font><br></p>
+        </footer>
+    </body>
+</html>

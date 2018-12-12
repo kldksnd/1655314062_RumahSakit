@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en">
+    <head>
+        <title>Rumah Sakit</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <style>
+            body {
+                font: 20px Montserrat, sans-serif;
+                line-height: 1.8;
+                color: #f5f6f7;
+            }
+            p {font-size: 16px;}
+            .margin {margin-bottom: 45px;}
+            .bg-1 { 
+                background-color: #1abc9c; /* Green */
+                color: #ffffff;
+            }
+            .bg-4 { 
+                background-color: #2f2f2f; /* Black Gray */
+                color: #fff;
+            }
+            .container-fluid {
+                padding-top: 70px;
+                padding-bottom: 70px;
+            }            
+            .navbar {
+                padding-top: 15px;
+                padding-bottom: 15px;
+                border: 0;
+                border-radius: 0;
+                margin-bottom: 0;
+                font-size: 12px;
+                letter-spacing: 5px;
+            }
+            .navbar-nav  li a:hover {
+                color: #1abc9c !important;
+            }
+        </style>
+    </head>
+    <body>
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>                        
+                    </button>
+                    <a class="navbar-brand" href=admin_home.html>Home</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav navbar-right"> 
+                        <li><a href="admin_daftarPasien.html">Daftar Pasien</a></li>
+                        <li><a href="admin_tambahDokter.html">Tambah Dokter</a></li>
+                        <li><a href="admin_tambahKlinik.html">Tambah Klinik</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid bg-1">
+            <h3 class="margin">Form Tambah Klinik</h3>
+            <form name="tesJson" action=""
+                  onsubmit="return make_json(this);" method="POST">
+                <div class="form-group">
+                    <label for="idKlinik">ID Klinik:</label>
+                    <input type="text" class="form-control" id="idKlinik" placeholder="Masukkan ID Klinik">
+                </div>
+                <div class="form-group">
+                    <label for="nama">Nama Klinik:</label>
+                    <input type="text" class="form-control" id="nama" placeholder="Masukkan Nama Klinik">
+                </div>
+                <div class="form-group">
+                    <label for="spesialis">Spesialis:</label>
+                    <input type="text" class="form-control" id="spesialis" placeholder="Masukkan Spesialis">
+                </div>
+                <button type="submit" class="btn-default"> Simpan</button>
+            </form>  
+        </div>
+
+        <p id="output"></p>
+        <script>
+            function make_json(form) {
+                var json = {
+                    "idKlinik": form.idKlinik.value,
+                    "nama": form.nama.value,
+                    "spesialis": form.spesialis.value
+                };
+                var html = JSON.stringify(json, 0, 100);
+                var Url = "http://202.94.83.190:8080/165314062rsku/webresources/Klinik/tambahKlinik";
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', Url, false);
+                xhr.setRequestHeader("Content-type", "application/json");
+                xhr.send(html);
+                alert(html);
+                document.getElementById("output").innerHTML = html;
+                return false;
+            }
+        </script>
+        
+        <!-- Footer -->
+        <footer class="container-fluid bg-4 text-center">
+            <p><font size="4">Jl. Jendral Sudirman, Ilir Kota, Kapuas, Kab. Sanggau, Kalimantan Barat 78516</font><br>
+                <font size="3">Telp: (+62) 813 5138 7555 | E-mail: rssanggau@gmail.com</font><br></p>
+        </footer>
