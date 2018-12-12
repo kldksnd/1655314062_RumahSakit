@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Registrasi</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <style>
+            body {
+                font: 20px Montserrat, sans-serif;
+                line-height: 1.8;
+                color: #f5f6f7;
+            }
+            p {font-size: 16px;}
+            .margin {margin-bottom: 45px;}
+            .bg-1 { 
+                background-color: #1abc9c; /* Green */
+                color: #ffffff;
+            }
+            .bg-2 { 
+                background-color: #474e5d; /* Dark Blue */
+                color: #ffffff;
+            }
+            .bg-3 { 
+                background-color: #ffffff; /* White */
+                color: #555555;
+            }
+            .bg-4 { 
+                background-color: #2f2f2f; /* Black Gray */
+                color: #fff;
+            }
+            .container-fluid {
+                padding-top: 70px;
+                padding-bottom: 70px;
+            }
+            .navbar {
+                padding-top: 15px;
+                padding-bottom: 15px;
+                border: 0;
+                border-radius: 0;
+                margin-bottom: 0;
+                font-size: 12px;
+                letter-spacing: 5px;
+            }
+            .navbar-nav  li a:hover {
+                color: #1abc9c !important;
+            }
+        </style>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>                        
+                    </button>
+                    <a class="navbar-brand" href=index.html>Home</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav navbar-right">
+                         <li><a href = registrasi.html>Registrasi</a></li>
+                        <li><a href=caripasien.html>Cari Pasien</a></li>
+                        <li><a href=antrian.html>Antrian Klinik</a></li>
+                        <li><a href=bacaKlinik.html>Daftar Klinik</a></li>
+                        <li><a href=cariAntri.html>Cari Antrian</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid bg-1">
+            <h3 class="margin">Registrasi</h3>
+            <form name="tesJson" action=""
+                  onsubmit="return make_json(this);" method="POST">
+                <div class="form-group">
+                    <label for="nama">Nama</label>
+                    <input type="nama" class="form-control" id="nama" placeholder="Masukkan Nama">
+                </div>
+                <div class="form-group">
+                    <label for="nik">NIK:</label>
+                    <input type="nik" class="form-control" id="nik" placeholder="Masukkan Nomor Induk Kependudukan">
+                </div>
+                <div class="form-group">
+                    <label for="alamat">Alamat:</label>
+                    <input type="alamat" class="form-control" id="alamat" placeholder="Masukkan Alamat">
+                </div>
+                <div class="form-group">
+                    <label for="ttl">Tanggal Lahir:</label>
+                    <input style="color: grey; width:100%;" type="date" name="ttl" value="">                </div>
+                <div class="form-group">
+                    <label for="jenisKelamin">Jenis Kelamin:</label>
+                    <input type="jenisKelamin" class="form-control" id="jenisKelamin" placeholder="Masukkan Jenis Kelamin">
+                </div>
+
+                <button type="Tambahkan" class="btn btn-default">Tambahkan</button>
+            </form>
+        </div>
+
+        <footer class="container-fluid bg-4 text-center">
+            <p><font size="4">Jl. Jendral Sudirman, Ilir Kota, Kapuas, Kab. Sanggau, Kalimantan Barat 78516</font><br>
+                <font size="3">Telp: (+62) 813 5138 7555 | E-mail: rssanggau@gmail.com</font><br></p>
+        </footer>
+
+    </body>
+
+    <pre id="output">
+    </pre>
+    <script>
+        function make_json(form) {
+            var json = {
+                "nama": form.nama.value,
+                "nik": form.nik.value,
+                "alamat": form.alamat.value,
+                "ttl": form.ttl.value,
+                "jenisKelamin": form.jenisKelamin.value
+            };
+            var html = JSON.stringify(json, 0, 100);
+            var Url = "http://202.94.83.190:8080/rsku/webresources/pasien/tambahPasienBaru";
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', Url, false);
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.send(html);
+
+            document.getElementById("output").innerHTML = html;
+            return false;
+        }
+    </script>

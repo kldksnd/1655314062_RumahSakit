@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en">
+    <head>
+        <title>Rumah Sakit</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <style>
+            #map {
+                height: 50%;
+                width: 50%
+            }
+            /* Optional: Makes the sample page fill the window. */
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                font: 20px Montserrat, sans-serif;
+                line-height: 1.8;
+                color: #f5f6f7;
+            }
+            p {font-size: 16px;}
+            .margin {margin-bottom: 45px;}
+            .bg-1 { 
+                background-color: #1abc9c; /* Green */
+                color: #ffffff;
+            }
+            .bg-2 { 
+                background-color: #474e5d; /* Dark Blue */
+                color: #ffffff;
+            }
+            .bg-3 { 
+                background-color: #000000; /* White */
+                color: #555555;
+            }
+            .bg-4 { 
+                background-color: #2f2f2f; /* Black Gray */
+                color: #fff;
+            }
+            .container-fluid {
+                padding-top: 70px;
+                padding-bottom: 70px;
+            }            .navbar {
+                padding-top: 15px;
+                padding-bottom: 15px;
+                border: 0;
+                border-radius: 0;
+                margin-bottom: 0;
+                font-size: 12px;
+                letter-spacing: 5px;
+            }
+            .navbar-nav  li a:hover {
+                color: #1abc9c !important;
+            }
+           
+        </style>
+    </head>
+    <body>
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>                        
+                    </button>
+                    <a class="navbar-brand" href=index.html>Home</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href = registrasi.html>Registrasi</a></li>
+                        <li><a href=caripasien.html>Cari Pasien</a></li>
+                        <li><a href=antrian.html>Antrian Klinik</a></li>
+                        <li><a href=bacaKlinik.html>Daftar Klinik</a></li>
+                        <li><a href=cariAntri.html>Cari Antrian</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- First Container -->
+        <div class="container-fluid bg-1 text-center">
+            <h3 class="margin">Rumah Sakit</h3>
+            <img src="medis1.jpg" class="img-responsive img-circle margin" style="display:inline" alt="Medis" width="350" height="350">
+
+        </div>
+<center>   <button type="button" onclick="loadMaps()">Maps</button> <button type="button" onclick="loadKlinik()">Klinik</button> <button type="button" onclick="loadDokter()">Dokter</button>
+    </center> <br/>
+                    <p id="demo"></p> 
+            <p id="demo2"></p> 
+            <div style="color:black" id="tampil1"></div>
+            <p id="demo3"></p> 
+            <div style="color:black" id="tampil2"></div>
+<div id="map"/></div>
+<script>
+    var map;
+    function loadMaps() {
+        var url = "http://202.94.83.190:8080/165314062rsku/webresources/Location";
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("demo").innerHTML = "";
+                var obj = JSON.parse(this.responseText);
+                map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 15, center: {lat: obj[0].lat, lng: obj[0].lng}, });
+                var marker = [];
+                for (var i = 0; i < obj.length; i++) {
+                    marker[i] = new google.maps.Marker({position: {lat: obj[i].lat, lng: obj[i].lng}, map: map});
+                }
+            }
+        };
+        xhttp.open("GET", url, true);
+        xhttp.send();
+    }
+    function loadKlinik() {
+        var xmlhttp = new XMLHttpRequest();
+        var url = "http://202.94.83.190:8080/165314062rsku/webresources/Klinik";
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                myFunction(this.responseText);
+            }
+        }
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+
+        function myFunction(response) {
+            var arr = JSON.parse(response);
+            var i;
+            var out = "<table><tr><td>Nomor</td><td>Nama</td><td>Spesialis</td>";
+
+            for (i = 0; i < arr.length; i++) {
+                out += "<tr><td>" +
+                        arr[i].idKlinik + "</td><td>" + arr[i].nama + "</td><td>" +
+                        arr[i].spesialis;
+
+            }
+            out += "</table>";
+            document.getElementById("tampil1").innerHTML = out;
+        }
+    }
+    function loadDokter() {
+        var xmlhttp = new XMLHttpRequest();
+        var url = "http://202.94.83.190:8080/165314062rsku/webresources/Dokter";
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                myFunction(this.responseText);
+            }
+        }
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+        function myFunction(response) {
+            var arr = JSON.parse(response);
+            var i;
+            var out = "<table><tr><td>Nomor</td><td>Nama Dokter</td><td>Spesialis</td>";
+
+            for (i = 0; i < arr.length; i++) {
+                out += "<tr><td>" +
+                        arr[i].id + "</td><td>" + arr[i].nama + "</td><td>" +
+                        arr[i].spesialis;
+
+            }
+            out += "</table>";
+            document.getElementById("tampil2").innerHTML = out;
+        }
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnD2l64I6G6fUkPpc3D79Jcau30v8xEKE&callback=initMap"
+async defer></script>
+        <!-- Second Container -->
+    
+        <div class="container-fluid bg-2 text-center">
+            <p>Selalu jaga kesehatan anda karena kesehatan itu mahal harganya! :)</p>
+            
+        </div>
+
+        <!-- Third Container (Grid) -->
+        <div class="container-fluid bg-3 text-center">    
+            <h3 class="margin">Informasi</h3><br>
+            <div class="row">
+                <div class="col-sm-4">
+                    <p>Kami mempunyai layanan dan ruangan yang bersih untuk layak ditempati</p>
+                    <img src="medis2.jpg" class="img-responsive margin" style="width:100%" alt="Image">
+                </div>
+                <div class="col-sm-4"> 
+                    <p>Kami menyediakan fasilitas yang lengkap untuk kenyamanan pasien
+                        dalam melakukan pemeriksaan</p>
+                    <img src="medis3.jpg" class="img-responsive margin" style="width:100%" alt="Image">
+                </div>
+                <div class="col-sm-4"> 
+                    <p>Kami menyediakan tenaga kerja dokter dan staff yang handal untuk
+                        melakukan pelayanan dengan ramah</p>
+                    <img src="medis4.jpg" class="img-responsive margin" style="width:100%" alt="Image">
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="container-fluid bg-4 text-center">
+            <p><font size="4">Jl. Jendral Sudirman, Ilir Kota, Kapuas, Kab. Sanggau, Kalimantan Barat 78516</font><br>
+                <font size="3">Telp: (+62) 813 5138 7555 | E-mail: rssanggau@gmail.com</font><br></p>
+        </footer>
+    </body>
+</html>

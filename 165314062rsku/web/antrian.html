@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en">
+    <head>
+        <title>Antrian Klinik</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <style>
+            body {
+                font: 20px Montserrat, sans-serif;
+                line-height: 1.8;
+                color: #f5f6f7;
+            }
+            p {font-size: 16px;}
+            .margin {margin-bottom: 45px;}
+            .bg-1 { 
+                background-color: #1abc9c; /* Green */
+                color: #ffffff;
+            }
+            .bg-2 {     
+                background-color: #474e5d; /* Dark Blue */
+                color: #ffffff;
+            }
+            .bg-3 { 
+                background-color: #ffffff; /* White */
+                color: #555555;
+            }
+            .bg-4 { 
+                background-color: #2f2f2f; /* Black Gray */
+                color: #fff;
+            }
+            .container-fluid {
+                padding-top: 70px;
+                padding-bottom: 70px;
+            }            
+            .navbar {
+                padding-top: 15px;
+                padding-bottom: 15px;
+                border: 0;
+                border-radius: 0;
+                margin-bottom: 0;
+                font-size: 12px;
+                letter-spacing: 5px;
+            }
+            .navbar-nav  li a:hover {
+                color: #1abc9c !important;
+            }
+        </style>
+    </head>
+    <body>
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>                        
+                    </button>
+                    <a class="navbar-brand" href=index.html>Home</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav navbar-right">
+                         <li><a href = registrasi.html>Registrasi</a></li>
+                        <li><a href=caripasien.html>Cari Pasien</a></li>
+                        <li><a href=antrian.html>Antrian Klinik</a></li>
+                        <li><a href=bacaKlinik.html>Daftar Klinik</a></li>
+                        <li><a href=cariAntri.html>Cari Antrian</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid bg-1">
+            <h3 class="margin">Cari</h3>
+            <form name="tesJson" action=""
+                  onsubmit="return make_json(this);" method="POST">
+                <div class="form-group">
+                    <label for="nik">NIK:</label>
+                    <input type="nik" class="form-control" id="nik" placeholder="Masukkan NIK">
+                    <button type="button" onclick="loadDoc()" id="btn">Cari</button>
+                </div>
+                <h3 class="margin">Form Antrian Klinik</h3>
+                <div class="form-group">
+                        <label for="nama">Nama</label>
+                        <input type="nama" class="form-control" id="nama" placeholder="Masukkan nama">
+                    </div>
+                    <div class="form-group">
+                        <label for="nik">NIK:</label>
+                        <input type="nik" class="form-control" id="noRm" placeholder="Masukkan NIK">
+                    </div>
+                    <div class="form-group">
+                        <label for="alamat">Alamat:</label>
+                        <input type="alamat" class="form-control" id="alamat" placeholder="Masukkan Alamat">
+                    </div>
+                    <div class="form-group">
+                        <label for="tanggal">Tanggal Berobat:</label>
+                        <input style="color:black; width:100%;" type="date" id="tanggal" value="">
+                    </div>
+                <font color=black size="3">Klinik : </font><br>
+                <select name="klinik">
+                    <option style="color:black" label="--Pilih--"></option>
+                    <option style="color:black" value="Ibu dan Anak">Anak</option>
+                    <option style="color:black" value="Gigi">Gigi</option>
+                    <option style="color:black" value="Mata">Mata</option>
+                </select>
+                <button type="Simpan" class="btn btn-default">Simpan</button>
+            </form>
+        </div>
+
+        <p id="output"></p>
+        <script>
+            function loadDoc() {
+                var url = "http://206.189.38.188:8080/myrs/webresources/pasien/cariPasien?nik=" + nik.value;
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("GET", url, true);
+                xhttp.send();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("output").innerHTML = this.responseText;
+                        var myObj = JSON.parse(this.responseText);
+                        document.getElementById("nama").value = myObj.nama;
+                        document.getElementById("alamat").value = myObj.alamat;
+                        document.getElementById("noRm").value = myObj.noRm;
+
+                    }
+                }
+            }
+        </script>
+        <script>
+            function make_json(form) {
+                var json = {
+                    "tanggal": form.tanggal.value,
+                    "noRm": form.nik.value,
+                    "nama": form.nama.value,
+                    "alamat": form.alamat.value,
+                    "namaKlinik": form.namaKlinik.value
+                };
+                var html = JSON.stringify(json, 0, 100);
+                var Url = "http://206.189.38.188:8080/myrs/webresources/antrian/tambahAntri";
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', Url, false);
+                xhr.setRequestHeader("Content-type", "application/json");
+                xhr.send(html);
+
+                document.getElementById("output").innerHTML = html;
+                return false;
+            }
+        </script>
+
+</html>
